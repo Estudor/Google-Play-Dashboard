@@ -7,7 +7,7 @@
 - [x] Conversão das colunas
 - [x] ... (os 11 itens do enunciado, marcados)
 ## Funcionalidade extra
-#O que ela faz, como usar e como foi feita.
+*O que ela faz, como usar e como foi feita.*
 Uma funcionalidade que usa a data de atualização do app para mostrar os apps que foram atualizados
 em um periodo de tempo, assim o usuário sabe se o jogo está abandonado ou atualizado
 ## Como rodar
