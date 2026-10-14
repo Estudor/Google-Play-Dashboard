@@ -22,3 +22,4 @@ def ler_apps():
         print("Algum erro aconteceu na leitura do arquivo", error)
 
     return apps
+
