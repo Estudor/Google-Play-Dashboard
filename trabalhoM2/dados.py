@@ -23,3 +23,30 @@ def ler_apps():
 
     return apps
 
+def montar_tabela(apps):
+    """Prepara as linhas que aparecem na tabela, com nomes de coluna amigáveis."""
+    tabela = []
+    for app in apps:
+        linha = {
+            "Título": app["titulo"],
+            "Categoria": app["categoria"],
+            "Nota": app["nota"] * "⭐",
+            "Preço": f"£ {app["preco"]:.2f}"
+        }
+        tabela.append(linha)
+    return tabela
+
+def preparar_apps(linhas):
+    """Recebe as linhas lidas do CSV e devolve os livros com preço e nota em número."""
+    apps = []
+    for linha in linhas:
+        app = {
+            "titulo": linha["titulo"],
+            "categoria": linha["categoria"],
+            "url": linha["url"]
+        }
+        apps.append(app)
+
+def carregar_apps():
+    """Lê o CSV e já devolve os livros prontos para usar."""
+    return preparar_apps(ler_apps())
