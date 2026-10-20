@@ -12,3 +12,9 @@ Uma funcionalidade que usa a data de atualização do app para mostrar os apps q
 em um periodo de tempo, assim o usuário sabe se o jogo está abandonado ou atualizado
 ## Como rodar
 Comandos para rodar o app no computador.
+
+temporario (dev)
+git config --global user.name ""
+git config --global user.email ""
+pip install -r trabalhoM2/requirements.txt
+python -m streamlit run trabalhoM2/app.py

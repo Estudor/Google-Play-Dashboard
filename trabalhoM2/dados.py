@@ -60,7 +60,7 @@ def converter_avaliacao(avaliacao):
 def converter_tamanho(tamanho):
     """Converte o tamanho para o tipo float se não é 'Varies with device'"""
     if tamanho != "Varies with device":
-        return float(tamanho.replace("M", ""))
+        return float(tamanho.replace("M", "").replace("k", ""))
     return tamanho
 
 def converter_preco(preco):
