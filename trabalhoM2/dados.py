@@ -23,25 +23,11 @@ def ler_apps():
 
     return apps
 
-def montar_tabela(apps):
-    """Prepara as linhas que aparecem na tabela, com nomes de coluna amigáveis."""
-    tabela = []
-    for app in apps:
-        linha = {
-            "Título": app["titulo"],
-            "Categoria": app["categoria"],
-            "Nota": app["nota"] * "⭐",
-            "Preço": f"£ {app["preco"]:.2f}"
-        }
-        tabela.append(linha)
-    return tabela
-
 def calcular_preco_medio(apps):
     """Soma os preços de todos os apps e divide pelo total."""
     soma: float = 0
     for app in apps:
         soma += app["preco"]
-
     preco_medio: float = soma / len(apps)
     return preco_medio
 
@@ -54,26 +40,56 @@ def contar_nota_maior_igual_quatro_ponto_cinco(apps):
 
     return contador
 
+def converter_instalacao(instalacao):
+    """Converte as instalacao para número inteiro"""
+    tabela = str.maketrans({
+        ',': '',
+        '+': ''
+    })
+    num_instalacao = instalacao.translate(tabela)
+    return int(num_instalacao)
+
+def converter_nota(nota):
+    """Converte a nota para o tipo float"""
+    return float(nota)
+
+def converter_avaliacao(avaliacao):
+    """Converte as avaliacoes para o tipo inteiro"""
+    return int(avaliacao)
+
+def converter_tamanho(tamanho):
+    """Converte o tamanho para o tipo float se não é 'Varies with device'"""
+    if tamanho != "Varies with device":
+        return float(tamanho.replace("M", ""))
+    return tamanho
+
+def converter_preco(preco):
+    """Converte o preco para o tipo float"""
+    return float(preco.replace("$", ""))
+
 def preparar_apps(linhas):
     """Recebe as linhas lidas do CSV e devolve os apps com preço e nota em número."""
     apps = []
     for linha in linhas:
         app = {
-            "titulo": linha["titulo"],
+            "apps": linha["app"],
             "categoria": linha["categoria"],
-            "url": linha["url"]
+            "nota": converter_nota(linha["nota"]),
+            "avaliacoes": converter_avaliacao(linha["avaliacoes"]),
+            "tamanho": converter_tamanho(linha["tamanho"]),
+            "instalacoes": converter_instalacao(linha["instalacoes"]),
+            "tipo": linha["tipo"],
+            "preco": converter_preco(linha["preco"]),
+            "classificacao": linha["classificacao"],
+            "generos": linha["generos"],
+            "atualizado_em": linha["atualizado_em"]
         }
         apps.append(app)
+    return apps
 
 def carregar_apps():
     """Lê o CSV e já devolve os apps prontos para usar."""
     return preparar_apps(ler_apps())
-
-def converter_instalacao_num():
-    """Converte as instalacao para número inteiro"""
-
-def calcular_instalacao_medio():
-    """Calcula a média das instalações"""
 
 if __name__ == "__main__":
     apps = ler_apps()
