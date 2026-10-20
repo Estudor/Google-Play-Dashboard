@@ -36,8 +36,26 @@ def montar_tabela(apps):
         tabela.append(linha)
     return tabela
 
+def calcular_preco_medio(apps):
+    """Soma os preços de todos os apps e divide pelo total."""
+    soma: float = 0
+    for app in apps:
+        soma += app["preco"]
+
+    preco_medio: float = soma / len(apps)
+    return preco_medio
+
+def contar_nota_maior_igual_quatro_ponto_cinco(apps):
+    """Conta quantos apps têm a nota 4.5 <="""
+    contador: int = 0
+    for app in apps:
+        if app["nota"] >= 4.5:
+            contador += 1
+
+    return contador
+
 def preparar_apps(linhas):
-    """Recebe as linhas lidas do CSV e devolve os livros com preço e nota em número."""
+    """Recebe as linhas lidas do CSV e devolve os apps com preço e nota em número."""
     apps = []
     for linha in linhas:
         app = {
@@ -48,5 +66,16 @@ def preparar_apps(linhas):
         apps.append(app)
 
 def carregar_apps():
-    """Lê o CSV e já devolve os livros prontos para usar."""
+    """Lê o CSV e já devolve os apps prontos para usar."""
     return preparar_apps(ler_apps())
+
+def converter_instalacao_num():
+    """Converte as instalacao para número inteiro"""
+
+def calcular_instalacao_medio():
+    """Calcula a média das instalações"""
+
+if __name__ == "__main__":
+    apps = ler_apps()
+    print("Qtde", len(apps))
+    print(type(apps[0]["nota"]))
