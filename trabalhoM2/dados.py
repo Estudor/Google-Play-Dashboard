@@ -1,5 +1,6 @@
 import csv
 from pathlib import Path
+from datetime import datetime
 
 PASTA = Path(__file__).parent
 CAMINHO_APPS = PASTA / "apps-google-play.csv"
@@ -39,6 +40,12 @@ def contar_nota_maior_igual_quatro_ponto_cinco(apps):
             contador += 1
 
     return contador
+
+def converter_data(data):
+    """Converte a data de atualização em uma date"""
+    data_t = datetime.strptime(data, "%B %d, %Y").date()
+    return data_t
+
 
 def converter_instalacao(instalacao):
     """Converte as instalacao para número inteiro"""

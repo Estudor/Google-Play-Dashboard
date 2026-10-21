@@ -1,6 +1,7 @@
 
 import streamlit as st
 import dados
+from datetime import timedelta
 
 def busca_com_titulo(apps, busca):
     """Retorna os apps que incluem esse texto no titulo"""
@@ -22,7 +23,7 @@ def pegar_categorias(apps):
     return categorias
 
 def encontrar_com_categoria(apps, categoria):
-    """Retorna apenas os livros da categoria escolhida"""
+    """Retorna apenas os apps da categoria escolhida"""
     if categoria == "Todas":
         return apps
 
@@ -32,6 +33,17 @@ def encontrar_com_categoria(apps, categoria):
             encontrados.append(app)
 
     return encontrados
+
+
+def filtrar_recentes(apps):
+    """Retorna apenas os apps atualizados dentro de um período de 1 mês da data_at"""
+    data_at = "July 26, 2018"
+    encontrados = []
+    for app in apps:
+        if timedelta(days=0) <= (dados.converter_data(app["atualizado_em"]) - dados.converter_data(data_at)) <= timedelta(days=30):
+           encontrados.append(app)
+    return(encontrados)
+
 
 def montar_tabela(apps):
     """Prepara as linhas que aparecem na tabela, com nomes de coluna amigáveis."""
@@ -81,12 +93,16 @@ def main():
     preco_medio = dados.calcular_preco_medio(apps)
     col2.metric("Preço médio", f"${preco_medio}")
 
-    col_busca, col_categoria, col_quant = st.columns(3)
+    col_busca, col_categoria, col_recente = st.columns(3)
     busca = col_busca.text_input("Buscar apps")
     categoria = col_categoria.selectbox("Filtro de categorias", ["Todas"] + pegar_categorias(apps))
+    recentes = col_recente.checkbox("Filtro recente atualizados")
 
     apps_categoria = encontrar_com_categoria(apps, categoria)
     encontrados = busca_com_titulo(apps_categoria, busca)
+    if recentes:
+           encontrados = filtrar_recentes(encontrados)
+    
     if (len(encontrados) == 0):
         st.warning("App não encontrado.")
     else:
