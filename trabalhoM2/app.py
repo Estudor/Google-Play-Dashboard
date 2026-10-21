@@ -81,13 +81,17 @@ def main():
     preco_medio = dados.calcular_preco_medio(apps)
     col2.metric("Preço médio", f"${preco_medio}")
 
-    col_busca, col_categoria = st.columns(2)
+    col_busca, col_categoria, col_quant = st.columns(3)
     busca = col_busca.text_input("Buscar apps")
     categoria = col_categoria.selectbox("Filtro de categorias", ["Todas"] + pegar_categorias(apps))
 
     apps_categoria = encontrar_com_categoria(apps, categoria)
     encontrados = busca_com_titulo(apps_categoria, busca)
-    st.dataframe(montar_tabela(encontrados))
+    if (len(encontrados) == 0):
+        st.warning("App não encontrado.")
+    else:
+        st.write("Apps encontrados", len(encontrados))    
+        st.dataframe(montar_tabela(encontrados))
     
      
 
