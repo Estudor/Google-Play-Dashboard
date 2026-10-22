@@ -1,5 +1,6 @@
 import csv
 from pathlib import Path
+from datetime import datetime
 
 PASTA = Path(__file__).parent
 CAMINHO_APPS = PASTA / "apps-google-play.csv"
@@ -8,7 +9,7 @@ def ler_apps():
     """Lê o CSV de apps e devolve uma lista de dicionários.
 
     Os valores vêm do jeito que estão no arquivo, ou seja, como texto:
-    {"titulo": "Sharp Objects", "preco": "£47.82", "nota": "Four", ...}
+    {"app": "Sketch - Draw & Paint", "categoria": "ART_AND_DESIGN", "nota": "4.5", ...}
     """
     apps = []
     try:
@@ -20,7 +21,6 @@ def ler_apps():
         print("O arquivo apps-google-play.csv não foi encontrado")
     except Exception as error:
         print("Algum erro aconteceu na leitura do arquivo", error)
-
     return apps
 
 def calcular_preco_medio(apps):
@@ -32,13 +32,49 @@ def calcular_preco_medio(apps):
     return preco_medio
 
 def contar_nota_maior_igual_quatro_ponto_cinco(apps):
-    """Conta quantos apps têm a nota 4.5 <="""
+    """Contar quantos apps têm a nota >= 4.5"""
     contador: int = 0
     for app in apps:
         if app["nota"] >= 4.5:
             contador += 1
-
     return contador
+
+def encontrar_mais_instalacao(apps):
+    """Encontra e devolve o app de maior instalação."""
+    mais_instalacao = apps[0]
+    for app in apps:
+        if app["instalacoes"] > mais_instalacao["instalacoes"]:
+            mais_instalacao = app
+    return mais_instalacao
+
+def encontrar_menor_tamanho(apps, lista_tamanho):
+    """Encontra e devolve o app de menor tamanho."""
+    menos_tamanho = apps[0]
+    for app in apps:
+        if app["tamanho"] == "Varies with device":
+            continue
+        if lista_tamanho[app["apps"]] == 'M':
+            app["tamanho"] *= 1000
+        if app["tamanho"] < menos_tamanho["tamanho"]:
+            menos_tamanho = app
+    return menos_tamanho
+
+def criar_lista_tamanho(apps):
+    lista_tamanho = {}
+    for app in apps:
+        if app["tamanho"] != "Varies with device":
+            if "M" in app["tamanho"]:
+                lista_tamanho[app["app"]] = "M"
+            elif "k" in app["tamanho"]:
+                lista_tamanho[app["app"]] = "k"
+        else:
+            lista_tamanho[app["app"]] = "Varies with device"
+    return lista_tamanho   
+
+def converter_data(data):
+    """Converte a data de atualização em uma date"""
+    data_t = datetime.strptime(data, "%B %d, %Y").date()
+    return data_t
 
 def converter_instalacao(instalacao):
     """Converte as instalacao para número inteiro"""
@@ -60,7 +96,7 @@ def converter_avaliacao(avaliacao):
 def converter_tamanho(tamanho):
     """Converte o tamanho para o tipo float se não é 'Varies with device'"""
     if tamanho != "Varies with device":
-        return float(tamanho.replace("M", ""))
+        return float(tamanho.replace("M", "").replace("k", ""))
     return tamanho
 
 def converter_preco(preco):
