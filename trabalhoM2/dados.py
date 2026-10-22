@@ -53,13 +53,18 @@ def encontrar_menor_tamanho(apps, lista_tamanho):
     for app in apps:
         if app["tamanho"] == "Varies with device":
             continue
-        if lista_tamanho[app["apps"]] == 'M':
+        if lista_tamanho[app["apps"]] == "M":
             app["tamanho"] *= 1000
         if app["tamanho"] < menos_tamanho["tamanho"]:
             menos_tamanho = app
     return menos_tamanho
 
 def criar_lista_tamanho(apps):
+    """Cria uma lista de tamnaho dos apps.
+
+    Se o tamanho tem megabytes adiciona na lista o nome do app e caracter de 'M',
+    senão adiciona caracter de 'k' (kilobytes).
+    """
     lista_tamanho = {}
     for app in apps:
         if app["tamanho"] != "Varies with device":
