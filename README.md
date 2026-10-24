@@ -1,7 +1,7 @@
 # Google Play Dashboard
 **Membros:** Bruno Dal Prá (Estudor), Bruno Shinjy Kemura (Bruno467890)
 **Dataset:** Apps da Google Play (https://www.kaggle.com/datasets/lava18/google-play-store-apps)
-**App publicado:** https://...streamlit.app
+**App publicado:** https://dashboard-play-biblioteca.streamlit.app/
 
 ## Funcionalidades
 - [x] Leitura do CSV
