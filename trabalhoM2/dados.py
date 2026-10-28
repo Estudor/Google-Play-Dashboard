@@ -54,11 +54,11 @@ def encontrar_menor_tamanho(apps, lista_tamanho):
         if app["tamanho"] == "Varies with device":
             continue
         if lista_tamanho[app["apps"]] == "M":
-            app["tamanho"] *= 1000
+            app["tamanho"] *= 1024
         if app["tamanho"] < menos_tamanho["tamanho"]:
             menos_tamanho = app
         if lista_tamanho[app["apps"]] == "M":
-            app["tamanho"] /= 1000
+            app["tamanho"] /= 1024
     return menos_tamanho
 
 def criar_lista_tamanho(apps):
