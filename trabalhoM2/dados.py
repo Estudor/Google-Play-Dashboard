@@ -4,6 +4,7 @@ from datetime import datetime
 
 PASTA = Path(__file__).parent
 CAMINHO_APPS = PASTA / "apps-google-play.csv"
+CAMINHO_FAVORITOS = PASTA / "apps-favoritos.csv"
    
 def ler_apps():
     """Lê o CSV de apps e devolve uma lista de dicionários.

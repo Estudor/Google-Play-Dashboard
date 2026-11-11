@@ -98,44 +98,55 @@ def main():
     st.set_page_config(page_title="Dashboard - Google Play", page_icon="🗂️", layout="wide")
     st.title("🗂️ Dashboard - Google Play")
 
+    aba_catalogo, aba_favoritos = st.tabs(["Catálogo", "Favoritos"])
+
     apps = dados.carregar_apps()
+    def mostrar_catalogo(apps):
 
-    col1, col2, col3, col4, col5 = st.columns(5)
-    qtd_apps = len(apps)
-    col1.metric("Total de Apps", qtd_apps)
+        col1, col2, col3, col4, col5 = st.columns(5)
+        qtd_apps = len(apps)
+        col1.metric("Total de Apps", qtd_apps)
+        
+        preco_medio = dados.calcular_preco_medio(apps)
+        col2.metric("Preço médio", f"${preco_medio:.2f}")
+
+        nota_maior_igual_quatro_ponto_cinco = dados.contar_nota_maior_igual_quatro_ponto_cinco(apps)
+        col3.metric("Qtd. apps nota >= 4.5", nota_maior_igual_quatro_ponto_cinco)
+
+        mais_instalado = dados.encontrar_mais_instalacao(apps)
+        col4.metric("App mais instalado", f"{mais_instalado["instalacoes"]}+")
+        col4.caption(mais_instalado["apps"])
+
+        lista_tamanho = dados.criar_lista_tamanho(dados.ler_apps())
+
+        menor_tamanho = dados.encontrar_menor_tamanho(apps, lista_tamanho)
+        col5.metric("App de menor tamanho", f"{menor_tamanho["tamanho"]}k")
+        col5.caption(menor_tamanho["apps"])
+
+        col_busca, col_categoria, col_recente = st.columns(3)
+        busca = col_busca.text_input("Buscar apps")
+        categoria = col_categoria.selectbox("Filtro de categorias", ["Todas"] + pegar_categorias(apps))
+        recentes = col_recente.checkbox("Filtro recente atualizados")
+
+        apps_categoria = encontrar_com_categoria(apps, categoria)
+        encontrados = busca_com_titulo(apps_categoria, busca)
+        if recentes:
+            encontrados = filtrar_recentes(encontrados)
+        
+        if (len(encontrados) == 0):
+            st.warning("App não encontrado.")
+        else:
+            st.write("Apps encontrados", len(encontrados))    
+            st.dataframe(montar_tabela(encontrados, lista_tamanho))
+        
+    def mostrar_favoritos():
+        st.warning("a")
     
-    preco_medio = dados.calcular_preco_medio(apps)
-    col2.metric("Preço médio", f"${preco_medio:.2f}")
+    with aba_catalogo:
+        mostrar_catalogo(apps)
+    with aba_favoritos:
+        mostrar_favoritos()
 
-    nota_maior_igual_quatro_ponto_cinco = dados.contar_nota_maior_igual_quatro_ponto_cinco(apps)
-    col3.metric("Qtd. apps nota >= 4.5", nota_maior_igual_quatro_ponto_cinco)
-
-    mais_instalado = dados.encontrar_mais_instalacao(apps)
-    col4.metric("App mais instalado", f"{mais_instalado["instalacoes"]}+")
-    col4.caption(mais_instalado["apps"])
-
-    lista_tamanho = dados.criar_lista_tamanho(dados.ler_apps())
-
-    menor_tamanho = dados.encontrar_menor_tamanho(apps, lista_tamanho)
-    col5.metric("App de menor tamanho", f"{menor_tamanho["tamanho"]}k")
-    col5.caption(menor_tamanho["apps"])
-
-    col_busca, col_categoria, col_recente = st.columns(3)
-    busca = col_busca.text_input("Buscar apps")
-    categoria = col_categoria.selectbox("Filtro de categorias", ["Todas"] + pegar_categorias(apps))
-    recentes = col_recente.checkbox("Filtro recente atualizados")
-
-    apps_categoria = encontrar_com_categoria(apps, categoria)
-    encontrados = busca_com_titulo(apps_categoria, busca)
-    if recentes:
-           encontrados = filtrar_recentes(encontrados)
-    
-    if (len(encontrados) == 0):
-        st.warning("App não encontrado.")
-    else:
-        st.write("Apps encontrados", len(encontrados))    
-        st.dataframe(montar_tabela(encontrados, lista_tamanho))
-    
 
 if __name__ == "__main__":
     main()

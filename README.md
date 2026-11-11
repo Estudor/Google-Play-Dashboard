@@ -14,6 +14,9 @@
 - [x] Filtro de categorias
 - [x] Buscar apps por nome
 - [x] Filtro de recentemente atualizados
+- [ ] Imagens dos Apps
+- [ ] Apps favoritos
+- [ ] Comentários do usuário nos Apps
       
 ## Funcionalidade extra
 *O que ela faz, como usar e como foi feita.*
