@@ -4,7 +4,8 @@ from datetime import datetime
 
 PASTA = Path(__file__).parent
 CAMINHO_APPS = PASTA / "apps-google-play.csv"
-   
+CAMPOS_FAVORITO = ["titulo", "preco", "categoria", "generos", "status", "comentario"]
+
 def ler_apps():
     """Lê o CSV de apps e devolve uma lista de dicionários.
 
@@ -40,6 +41,45 @@ def contar_nota_maior_igual_quatro_ponto_cinco(apps):
             contador += 1
 
     return contador
+
+def encontrar_mais_instalacao(apps):
+    """Encontra e devolve o app de maior instalação."""
+    mais_instalacao = apps[0]
+    for app in apps:
+        if app["instalacoes"] > mais_instalacao["instalacoes"]:
+            mais_instalacao = app
+    return mais_instalacao
+
+def encontrar_menor_tamanho(apps, lista_tamanho):
+    """Encontra e devolve o app de menor tamanho."""
+    menos_tamanho = apps[0]
+    for app in apps:
+        if app["tamanho"] == "Varies with device":
+            continue
+        if lista_tamanho[app["apps"]] == "M":
+            app["tamanho"] *= 1024
+        if app["tamanho"] < menos_tamanho["tamanho"]:
+            menos_tamanho = app
+        if lista_tamanho[app["apps"]] == "M":
+            app["tamanho"] /= 1024
+    return menos_tamanho
+
+def criar_lista_tamanho(apps):
+    """Cria uma lista de tamanho dos apps.
+
+    Se o tamanho tem megabytes adiciona na lista o nome do app e caracter de 'M',
+    senão adiciona caracter de 'k' (kilobytes).
+    """
+    lista_tamanho = {}
+    for app in apps:
+        if app["tamanho"] != "Varies with device":
+            if "M" in app["tamanho"]:
+                lista_tamanho[app["app"]] = "M"
+            elif "k" in app["tamanho"]:
+                lista_tamanho[app["app"]] = "k"
+        else:
+            lista_tamanho[app["app"]] = "Varies with device"
+    return lista_tamanho   
 
 def converter_data(data):
     """Converte a data de atualização em uma date"""
@@ -95,8 +135,44 @@ def preparar_apps(linhas):
     return apps
 
 def carregar_apps():
-    """Lê o CSV e já devolve os apps prontos para usar."""
-    return preparar_apps(ler_apps())
+        """Lê o CSV e já devolve os apps prontos para usar."""
+        return preparar_apps(ler_apps())
+
+def salvar_favorito(app):
+    """Acrescenta um app no fim do arquivo de favoritos (modo "a")."""
+    arquivo_ja_existia = CAMINHO_FAVORITOS.exists()
+    with open(CAMINHO_FAVORITOS, "a", encoding="utf-8", newline="") as arquivo:
+        escritor = csv.DictWriter(arquivo, fieldnames=CAMPOS_FAVORITO)
+        if not arquivo_ja_existia:
+            escritor.writeheader()
+        escritor.writerow({
+            "titulo": app["titulo"],
+            "preco": app["preco"],
+            "categoria": app["categoria"],
+            "generos": app["generos"],
+            "status": "Quero jogar",
+            "comentario": "",
+        })
+
+
+def carregar_favoritos():
+    """Lê os favoritos e devolve um dicionário: {titulo: dados do favorito}."""
+    favoritos = {}
+    try:
+        with open(CAMINHO_FAVORITOS, encoding="utf-8", newline="") as arquivo:
+            leitor = csv.DictReader(arquivo)
+            for linha in leitor:
+                favoritos[linha["app"]] = {
+                    "preco": float(linha["preco"]),
+                    "categoria": linha["categoria"],
+                    "classificacao": linha["classificacao"],
+                    "status": linha["status"],
+                    "comentario": linha["comentario"],
+                }
+    except FileNotFoundError:
+        pass # Ainda não há favoritos: não é um erro
+    return favoritos
+
 
 if __name__ == "__main__":
     apps = ler_apps()

@@ -5,7 +5,18 @@
 ## Funcionalidades
 - [x] Leitura do CSV
 - [x] Conversão das colunas
-- [x] ... (os 11 itens do enunciado, marcados)
+- [x] Total de apps
+- [x] Preço Médio
+- [x] Quantidade de apps com nota maior ou igual 4.5
+- [x] App com maior quantidade de instalações
+- [x] App de menor tamanho
+- [x] Filtro de categorias
+- [x] Buscar apps por nome
+- [x] Filtro de recentemente atualizados
+- [ ] Imagens dos Apps
+- [ ] Apps favoritos
+- [ ] Comentários do usuário nos Apps favoritos
+      
 ## Funcionalidade extra
 *O que ela faz, como usar e como foi feita.*
 Uma funcionalidade que usa a data de atualização do app para mostrar os apps que foram atualizados
