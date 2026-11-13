@@ -4,7 +4,8 @@ from datetime import datetime
 
 PASTA = Path(__file__).parent
 CAMINHO_APPS = PASTA / "apps-google-play.csv"
-CAMPOS_FAVORITO = ["titulo", "preco", "categoria", "generos", "status", "comentario"]
+CAMPOS_FAVORITO = ["titulo", "preco", "nota", "generos", "status", "comentario"]
+CAMINHO_FAVORITOS = PASTA / "apps-favoritos.csv"
 
 def ler_apps():
     """Lê o CSV de apps e devolve uma lista de dicionários.
@@ -146,9 +147,9 @@ def salvar_favorito(app):
         if not arquivo_ja_existia:
             escritor.writeheader()
         escritor.writerow({
-            "titulo": app["titulo"],
+            "titulo": app["apps"],
             "preco": app["preco"],
-            "categoria": app["categoria"],
+            "nota": app["nota"],
             "generos": app["generos"],
             "status": "Quero jogar",
             "comentario": "",
@@ -162,15 +163,15 @@ def carregar_favoritos():
         with open(CAMINHO_FAVORITOS, encoding="utf-8", newline="") as arquivo:
             leitor = csv.DictReader(arquivo)
             for linha in leitor:
-                favoritos[linha["app"]] = {
+                favoritos[linha["titulo"]] = {
                     "preco": float(linha["preco"]),
-                    "categoria": linha["categoria"],
-                    "classificacao": linha["classificacao"],
+                    "nota": linha["nota"],
+                    "generos": linha["generos"],
                     "status": linha["status"],
                     "comentario": linha["comentario"],
                 }
     except FileNotFoundError:
-        pass # Ainda não há favoritos: não é um erro
+        pass
     return favoritos
 
 

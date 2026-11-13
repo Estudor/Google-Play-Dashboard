@@ -49,6 +49,14 @@ def filtrar_recentes(apps):
            encontrados.append(app)
     return(encontrados)
 
+def somar_favoritos(favoritos):
+    total = 0
+
+    for favorito in favoritos.values():
+        total += favorito["preco"]
+
+    return total
+
 def montar_tabela(apps, lista_tamanho):
     """Prepara as linhas que aparecem na tabela, com nomes de coluna amigáveis."""
     tabela = []
@@ -97,6 +105,23 @@ def montar_tabela(apps, lista_tamanho):
                 "Atualizado em": app["atualizado_em"]
             }
         tabela.append(linha)
+    return tabela
+
+def montar_tabela_favoritos(favoritos):
+    tabela = []
+
+    for titulo, favorito in favoritos.items():
+        linha = {
+            "Título": titulo,
+            "Preço": f"$ {favorito['preco']}",
+            "Nota": favorito["nota"],
+            "Gêneros": favorito["generos"],
+            "Status": favorito["status"],
+            "Comentário": favorito["comentario"]
+        }
+
+        tabela.append(linha)
+
     return tabela
 
 def main():
@@ -151,10 +176,10 @@ def main():
                 if titulo in favoritos:
                     st.warning("Esse app já está nos favoritos.")
                 else:
-                    dados.salvar_favorito(busca_com_titulo(encontrados, titulo))
+                    app_sel = busca_com_titulo(encontrados, titulo)
+                    dados.salvar_favorito(app_sel[0])
                     st.success("App adicionado aos favoritos!")
 
-        
     def mostrar_favoritos():
         """Mostra os favoritos salvos."""
         favoritos = dados.carregar_favoritos()
