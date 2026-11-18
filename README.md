@@ -10,12 +10,12 @@
 - [x] Preço Médio
 - [x] Quantidade de apps com nota maior ou igual 4.5
 - [x] App com maior quantidade de instalações
+- [ ] Faixa de preços
 - [x] App de menor tamanho
 - [x] Filtro de categorias
 - [x] Buscar apps por nome
 - [x] Filtro de recentemente atualizados
-- [ ] Imagens dos Apps
-- [ ] Apps favoritos
+- [x] Apps favoritos
 - [ ] Comentários do usuário nos Apps
       
 ## Funcionalidade extra
